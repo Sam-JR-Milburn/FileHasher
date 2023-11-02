@@ -9,6 +9,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import MilburnSam.FileUtils.FileHasher;
+
 /**
  * TestFileHasher is designed to test file inputs (Under src/test/resources) 
  * with the FileHashing Algorithm in FileHasher.java.
