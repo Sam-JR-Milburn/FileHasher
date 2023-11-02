@@ -13,10 +13,9 @@ import java.security.NoSuchAlgorithmException;
  */
 public class FileHasher {
 	/**
-	 * Algorithm
-	 * The FactoryPattern used by MessageDigest.getInstance(String) has a lot of overhead.
-	 * For large file batches, we can counteract this by storing and resetting instances 
-	 * over the class's lifetime.
+	 * <b>Algorithm</b>
+	 * The Factory Pattern used by MessageDigest.getInstance(String) has a lot of overhead.
+	 * For large file batches, we can counteract this by storing instances for the classes lifetime.
 	 * <b>Source</b>: 
 	 * https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest
 	 */
@@ -41,17 +40,17 @@ public class FileHasher {
 	// FileHasher Section:
 	
 	/**
-	 * getHashFromFile will yield a 'base 64' String object of the FileInputStream applied, 
-	 * with the format of the Algorithm supplied.
+	 * getHashFromFile will yield a String object of hexadecimal format, 
+	 * with a supplied FileInputStream object and FileHasher.Algorithm object.
 	 * 
-	 * @param fis The FileInputStream of the File you want to Hash.
-	 * @return <b>String</b> The base 64 file fingerprint.
+	 * @param fis The FileInputStream of the File you want to hash.
+	 * @return <b>String</b> The hexadecimal file fingerprint.
 	 * @throws FileNotFoundException
 	 */
 	public static String getHashFromFile(FileHasher.Algorithm algo, FileInputStream fis) 
 		throws FileNotFoundException {
 		if(fis == null || algo == null || !(fis instanceof FileInputStream)) {
-			throw new FileNotFoundException("Null/Corrupted FileInputStream/Algorithm object.");
+			throw new FileNotFoundException("Null/Corrupted FileInputStream or Algorithm object.");
 		}
 		// Loop through the FileInputStream, 4096 bytes at a time.
 		byte[] filebytes = new byte[4096];
@@ -72,10 +71,18 @@ public class FileHasher {
 		}
 	}
 	
+	/**
+	 * getHashFromFile will yield a String object of hexadecimal format, 
+	 * with a supplied File object and FileHasher.Algorithm object.
+	 * 
+	 * @param file The File object, representing the file you want to hash.
+	 * @return <b>String</b> The hexadecimal file fingerprint.
+	 * @throws FileNotFoundException
+	 */
 	public static String getHashFromFile(FileHasher.Algorithm algo, File file) 
 		throws FileNotFoundException {
-		if(file == null || algo == null || !(file instanceof File)) {
-			throw new FileNotFoundException("Null/Corrupted File/Algorithm object.");
+		if(file == null || algo == null || !(file instanceof File) || file.isDirectory()) {
+			throw new FileNotFoundException("Null/Corrupted File or Algorithm object.");
 		}
 		// Open a FileInputStream from the provided File.
 		FileInputStream fis = new FileInputStream(file);
@@ -83,8 +90,21 @@ public class FileHasher {
 		return FileHasher.getHashFromFile(algo, fis);
 	}
 	
+	/**
+	 * getHashFromFile will yield a String object of hexadecimal format, 
+	 * with a supplied String object and FileHasher.Algorithm object.
+	 * 
+	 * @param filename The String of the file you want to hash.
+	 * @return <b>String</b> The hexadecimal file fingerprint.
+	 * @throws FileNotFoundException
+	 */
 	public static String getHashFromFile(FileHasher.Algorithm algo, String filename) 
 		throws FileNotFoundException {
+		if(algo == null || filename =="null" || filename.isEmpty()) {
+			throw new FileNotFoundException("Null/Corrupted String or Algorithm object.");
+		}
+		// Open a FileInputStream from the provided String: 
+		// Will throw a FileNotFoundException if it's a directory.
 		FileInputStream fis = new FileInputStream(filename);
 		// Use the FileInputStream method.
 		return FileHasher.getHashFromFile(algo, fis);
