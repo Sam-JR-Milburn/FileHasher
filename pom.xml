@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>FileUtils</groupId>
+  <artifactId>Hashing</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+  <name>FileHasher</name>
+  <build>
+	  <plugins>
+		  <!-- Compiler Plugin: Ensure we're at Java SE 11 or higher (>2018) -->
+		  <plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-compiler-plugin</artifactId>
+			  <configuration>
+				  <source>21</source>
+				  <target>21</target>
+			  </configuration>
+		  </plugin>
+		  <!-- Jar Plugin: Prevent default jar generation. -->
+		  <plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-jar-plugin</artifactId>
+			  <executions>
+				  <execution>
+					  <id>default-jar</id>
+					  <phase>none</phase>
+				  </execution>
+			  </executions>
+		  </plugin>
+		  <!-- Assembly Plugin: Output a new library Jar -->
+		  <plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-assembly-plugin</artifactId>
+			  <configuration>
+				  <descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				  <finalName>filehasher</finalName>
+				  <appendAssemblyId>false</appendAssemblyId>
+			  </configuration>
+			  <executions>
+				  <execution>
+					  <id>make-assembly</id>
+					  <phase>package</phase>
+					  <goals><goal>single</goal></goals>
+				  </execution>
+			  </executions>
+		  </plugin>
+	  </plugins>
+  </build>
+</project>
